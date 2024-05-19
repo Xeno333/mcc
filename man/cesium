@@ -1,0 +1,8 @@
+Cesium keywords:
+	Preprocesser:
+		#define <name> = <value>
+		#error <msg>
+		#if <statment>
+		#else
+		#include <file>
+		#isdefined <name>

@@ -1,0 +1,55 @@
+c{
+    #include<stdio.h>
+    #include<stdlib.h>
+    #include<string.h>
+}c
+
+
+
+
+func getstrlen(u8* str) : u64 {
+    mut u64 r = 0
+    while (str[r] != 0) {
+        r++
+    }
+    r++
+    return r
+}
+
+func printbool(bool v) {
+	if (v == true) {
+		printf("true")
+	}
+	if (v != true) {
+		printf("false")
+	}
+}
+
+
+func append(u8* fn, u8* block, u64 size) : i32 {
+	u64* f = fopen(fn, "a")
+	fwrite(block, 1, size, f)
+    fclose(f)
+	return 0
+}
+
+func fsize(u8* fn) : u64 {
+    u64 f = (fopen(fn, "rb") : u64)
+    fseek(f, 0, SEEK_END)
+    u64 size = ftell(f)
+    fclose(f)
+    return size
+}
+
+func fget(u8* fn) : u8* {
+    u64 f = (fopen(fn, "rb") : u64)
+	if (f == NULL) {
+		return NULL
+	}
+    u64 size = fsize(fn)
+    mut u8* block = malloc(size+1)
+    fread(block, 1, size, f)
+    fclose(f)
+    block[size+1] = 0
+    return block
+}

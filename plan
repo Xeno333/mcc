@@ -1,0 +1,10 @@
+To make a compiler for many languages in one tool under the MIT license
+
+Order of compileation:
+(For higher/complex language, (e.g.: Rust, Go, Cesium))
+1. In take the file and parse making it readable to the compiler
+2. Compile to C
+(For simple language, like C)
+3(1). Compile C to asm/or intermediate asm
+4(2). Asseble, or take to nantive asmbly and assemble
+~5(3). Link
