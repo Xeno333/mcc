@@ -55,6 +55,7 @@ package:
 
 # Clean rule
 clean:
+	@echo "Cleaning in $(OUT)"
 	rm -rf $(OUT)
 
 .PHONY: all clean package dirs
