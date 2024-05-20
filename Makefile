@@ -11,6 +11,10 @@ OBJDIR := ./bin/obj
 BIN := ./bin/bin
 MANDIR := ./man
 
+# Files
+LICENSE := ./LICENSE
+README := ./README.md
+
 # Package directories
 PKGDIR := ./bin/pkg
 PKGLIBDIR := ./lib
@@ -51,6 +55,8 @@ package:
 	@cp -r $(PKGLIBDIR) $(PKGDIR)
 	@echo "Adding man files..."
 	@cp -r $(MANDIR) $(PKGDIR)
+	@cp $(LICENSE) $(PKGDIR)
+	@cp $(README) $(PKGDIR)
 	@echo "Package created successfully."
 
 # Clean rule
