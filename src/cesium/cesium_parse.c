@@ -158,7 +158,7 @@ int parse_file(const compiler_args_t args) {
 			lflags.esc = false;
 	}
 
-	//send to fout
+	//send to parse
 	cp = 0L;
 	eof = false;
 	while (true) {
