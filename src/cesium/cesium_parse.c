@@ -16,13 +16,13 @@ static size_t cp = 0L;
 
 static bool eof = false;
 
-static char* get_fin_line() {
-	if (cp >= strlen(fin)) {
-	eof = true;
-	return NULL;
+static char* get_line(char* f) {
+	if (cp >= strlen(f)) {
+		eof = true;
+		return NULL;
 	}
 	size_t p = cp;
-	for (; ((fin[p] != '\n') && (fin[p] != '\0') && (fin[p] != ';')); p++) {
+	for (; ((f[p] != '\n') && (f[p] != '\0') && (f[p] != ';')); p++) {
 	}
 
 	char* line = malloc(p - cp + 1);
@@ -30,7 +30,7 @@ static char* get_fin_line() {
 		return NULL;
 
 	p = 0;
-	for (; ((fin[cp] != '\n') && (fin[cp] != '\0') && (fin[cp] != ';')); cp++, p++) line[p] = fin[cp];
+	for (; ((f[cp] != '\n') && (f[cp] != '\0') && (f[cp] != ';')); cp++, p++) line[p] = f[cp];
 	line[p] = '\0';
 
 	//pass term char
@@ -46,7 +46,7 @@ int parse_file(const compiler_args_t args) {
 	char* line = NULL;
 
 	//open the parse file
-	char* parse_fn = malloc(strlen(args.in_file) + strlen(MMC_parsing_file_extension) + sizeof(char));
+	char* parse_fn = malloc(strlen(args.in_file) + strlen(MMC_parsing_file_extension) + 1);
 	strcpy(parse_fn, args.in_file);
 	strcat(parse_fn, MMC_parsing_file_extension);
 	FILE* parse = fopen(parse_fn, "w");
@@ -79,11 +79,13 @@ int parse_file(const compiler_args_t args) {
 		rc = -1;
 		goto done;
 	}
+	long long fin_len = strlen(fin);
 
+	//handel includes
 
 	//parse
 	while (true) {
-		line = get_fin_line();
+		line = get_line(fin);
 		if (eof == true)
 			break;
 			
@@ -98,37 +100,106 @@ int parse_file(const compiler_args_t args) {
 		for (; ((line[p] != '\0') && ((line[p] == '\t') || (line[p] == ' '))); p++);
 		uline = line + p;
 
+		if (uline == NULL)
+			continue;
+
 		if (uline[0] == '\0')
 			continue;
 
-
-		if (strncmp(uline, "#", strlen("#")) == 0) {
-			if (strncmp((uline + sizeof(char)), "import ", strlen("import ")) == 0) {
-				//do import
-			}
-			//Preprocesser
+		//include
+		if (strncmp(uline, "#import", strlen("#import")) == 0) {
+			error("Cesium import!\n", true);
 		}
-		else if (strncmp(uline, "break", strlen("break")) == 0) {
-		}
-		else if (strncmp(uline, "continue", strlen("continue")) == 0) {
-		}
-
 
 		//printf("%s\n", line);
 		free(line);
 		line = NULL;
 	}
 
+	//add block to interate and replace ; with \n
+	struct lflags_s {
+		bool str : 1;
+		bool comment : 1;
+		bool ischar : 1;
+		bool esc : 1;
+	} lflags = {false, false, false, false};
+
+	for (long long i = 0; i != fin_len; i += 1) {
+		if (fin[i] == '\\')
+			lflags.esc = true;
+
+		else if ((fin[i] == '\n') && (lflags.comment == true))
+			lflags.comment = false;
+
+		else if ((fin[i] == '*') && (fin[i + 1] == '/') )
+			lflags.comment = false;
+
+		else if (fin[i] == '\'') 
+			lflags.ischar = !lflags.ischar;
+
+		else if ((fin[i] == '/') && (fin[i + 1] == '/') )
+			lflags.comment = true;
+
+		else if ((fin[i] == '/') && (fin[i + 1] == '*') )
+			lflags.comment = true;
+
+		else if (fin[i] == '"') 
+			lflags.str = !lflags.str;
+
+		else if (lflags.esc == true);
+		else if (lflags.str == true);
+		else if (lflags.ischar == true);
+		else if (lflags.comment == true);
+
+		else if (fin[i] == ';')
+			fin[i] = '\n';
+		
+		if (lflags.esc == true) 
+			lflags.esc = false;
+	}
+
+	//send to fout
+	cp = 0L;
+	eof = false;
+	while (true) {
+		line = get_line(fin);
+		if (eof == true)
+			break;
+			
+		if (line == NULL) {
+			rc = -1;
+			goto done;
+		}
+
+		//skip whitespaces
+		char* uline = NULL;
+		size_t p = 0;
+		for (; ((line[p] != '\0') && ((line[p] == '\t') || (line[p] == ' '))); p++);
+		uline = line + p;
+
+		if (uline == NULL)
+			continue;
+
+		if (uline[0] == '\0')
+			continue;
+
+		fprintf(parse, "%s\n", uline);
+
+		free(line);
+		line = NULL;
+	}
 
 	//end
 	rc = 0;
 	done:
 		if (line != NULL) {
 			free(line);
+			line = NULL;
 		}
 
 		if (fin != NULL) {
 			free(fin);
+			fin = NULL;
 		}
 
 		if (parse_fn != NULL) {
