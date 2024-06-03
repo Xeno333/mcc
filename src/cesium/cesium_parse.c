@@ -107,7 +107,35 @@ int parse_file(const compiler_args_t args) {
 			continue;
 
 		//include
-		if (strncmp(uline, "#import", strlen("#import")) == 0) {
+		if (strncmp(uline, "#import ", strlen("#import ")) == 0) {
+			char* ftr = uline + strlen("#import ");
+			while ((ftr[0] == ' ') || (ftr[0] == '\t'))
+				ftr++;
+
+
+			if (args.inc_path == NULL) {
+				error("Can not include file '", true);
+				error(ftr, false);
+				error("'!\n", false);
+				rc = -1;
+				goto done;
+			}
+			
+			//fget
+			char* finc = fget(ftr);
+			if (finc == NULL) {
+				error("Could read '", true);
+				error(ftr, false);
+				error("'!\n", false);
+				rc = -1;
+				goto done;
+			}
+			//long long finc_len = strlen(finc);
+
+			printf("%s", finc);
+
+			free(finc);
+			finc = NULL;
 			error("Cesium import!\n", true);
 		}
 

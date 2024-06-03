@@ -115,9 +115,11 @@ const char format_str_map[][STDMCC_str_map_str_len] = {
 
 void error(const char* errors, bool self) {
 	printf("\033[0;31m");
-	if (self == true)
+	if (self == true) {
 		printself();
-	printf("Error: %s", errors);
+		printf("Error: ");
+	}
+	printf("%s", errors);
 	printf("\033[0m");
 }
 
@@ -195,7 +197,7 @@ void help(void) {
 			-opt=<opt level>\n\
 			-std=<std ID>\n\
 			-format=<outputed format>\n\
-			-inc=<path to lincude from>\n\
+			-inc=<path to include from>\n\
 			-dev=on\tEnable development features.\n\
 			-lang=<language>\
 	\n");
