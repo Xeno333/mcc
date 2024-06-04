@@ -112,7 +112,6 @@ int parse_file(const compiler_args_t args) {
 			while ((ftr[0] == ' ') || (ftr[0] == '\t'))
 				ftr++;
 
-
 			if (args.inc_path == NULL) {
 				error("Can not include file '", true);
 				error(ftr, false);
