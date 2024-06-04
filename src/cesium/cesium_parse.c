@@ -143,9 +143,15 @@ int parse_file(const compiler_args_t args) {
 
 			//insert here
 
+			memcpy(mid, fin, cp - strlen(line) - 1);
+			memcpy(mid + (cp - strlen(line) - 1), finc, strlen(finc));
+			memcpy(mid + (cp - strlen(line) - 1) + strlen(finc), fin + cp, strlen(fin) - cp);
+			mid[(cp - strlen(line) - 1) + strlen(finc) + strlen(fin) - cp] = 0;
 
-			free(mid);
-			mid = NULL;
+			cp = cp - strlen(line) - 1;
+
+			free(fin);
+			fin = mid;
 
 			free(incfile);
 			incfile = NULL;
