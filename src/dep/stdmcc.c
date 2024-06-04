@@ -217,7 +217,7 @@ void help(void) {
 int fsize(const char* fn) {
 	FILE* f = fopen(fn, "rb");
 	fseek(f, 0, SEEK_END);
-	int size = ftell(f);
+	int size = ftell(f) - 1;
 	fclose(f);
 	return size;
 }
@@ -228,7 +228,7 @@ char* fget(const char* fn) {
 		return NULL;
 	}
 	int size = fsize(fn);
-	char* block = malloc(size+1);
+	char* block = malloc(size + 1);
 	size_t r = fread(block, 1, size, f);
 	if (r < size) {
 		if (ferror(f)) {
