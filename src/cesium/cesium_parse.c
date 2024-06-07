@@ -45,15 +45,21 @@ int parse_file(const compiler_args_t args) {
 	int rc = 0;
 	char* line = NULL;
 	char* incfile = NULL;
+	FILE* parse = NULL;
 
 	//open the parse file
 	char* parse_fn = malloc(strlen(args.in_file) + strlen(MMC_parsing_file_extension) + 1);
+	if (parse_fn == NULL) {
+		error("Not enough memory", true);
+		rc = -1;
+		goto done;
+	}
 	strcpy(parse_fn, args.in_file);
 	strcat(parse_fn, MMC_parsing_file_extension);
-	FILE* parse = fopen(parse_fn, "w");
+	parse = fopen(parse_fn, "w");
 	if (parse == NULL) {
-	printself();
-	printf("Could not open '%s' in write mode!\n", parse_fn);
+		printself();
+		printf("Could not open '%s' in write mode!\n", parse_fn);
 		rc = -1;
 		goto done;
 	}
@@ -65,8 +71,8 @@ int parse_file(const compiler_args_t args) {
 	//reopen in append mode
 	parse = fopen(parse_fn, "a");
 	if (parse == NULL) {
-	printself();
-	printf("Could not open '%s' in append mode!\n", parse_fn);
+		printself();
+		printf("Could not open '%s' in append mode!\n", parse_fn);
 		rc = -1;
 		goto done;
 	}
