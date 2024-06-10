@@ -164,8 +164,6 @@ int parse_file(const compiler_args_t args) {
 
 			free(finc);
 			finc = NULL;
-
-			error("Cesium import!\n", true);
 		}
 
 		//printf("%s\n", line);

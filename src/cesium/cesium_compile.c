@@ -24,6 +24,17 @@ int compile_file(const compiler_args_t args) {
 
 	char* fin = fget(parse_fn);
 
+	long long p = 0L;
+	bool esc = false;
+	while (fin[p] != '\0') {
+		while (((fin[p] != '\n') && (esc != true)) && (fin[p] != '\0') && (fin[p] != ';')) {
+			p++;
+		}
+		if (fin[p] == '\0') {
+			break;
+		}
+	}
+
 
     done:
 		if (parse_fn != NULL) {
