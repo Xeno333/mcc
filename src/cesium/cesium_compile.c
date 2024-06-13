@@ -24,7 +24,7 @@ int compile_file(const compiler_args_t args) {
 
 	char* fin = fget(parse_fn);
 
-	long long p = 0L;
+	/*long long p = 0L;
 	bool esc = false;
 	long long block_depth = 0L;
 	enum {no, line, multi} comment = no;
@@ -38,7 +38,7 @@ int compile_file(const compiler_args_t args) {
 		if (fin[p] == '\0') {
 			break;
 		}
-	}
+	}*/
 
 
     done:

@@ -29,6 +29,8 @@ int cesium_main(const compiler_args_t args) {
 		return -1;
 	}
 
+	return compile_file(args);
+
 	error("Cesium not implemented yet!\n", true);
 
 	return -1;

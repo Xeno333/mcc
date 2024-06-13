@@ -237,7 +237,7 @@ char* fget(const char* fn) {
 		}
 	}
 	fclose(f);
-	block[size+1] = 0;
+	block[size] = 0;
 	return block;
 }
 
