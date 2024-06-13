@@ -26,9 +26,14 @@ int compile_file(const compiler_args_t args) {
 
 	long long p = 0L;
 	bool esc = false;
+	long long block_depth = 0L;
+	enum {no, line, multi} comment = no;
 	while (fin[p] != '\0') {
 		while (((fin[p] != '\n') && (esc != true)) && (fin[p] != '\0') && (fin[p] != ';')) {
 			p++;
+		}
+		if (comment == line) {
+			comment = no;
 		}
 		if (fin[p] == '\0') {
 			break;
