@@ -1,10 +1,12 @@
-//stdmcc.c
+// stdmcc.c
+/*
+*/
 
-//system
+// system
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-//mcc
+// mcc
 #include "stdmcc.h"
 
 
@@ -212,35 +214,6 @@ void help(void) {
 	list_supported_langs();
 }
 
-
-
-int fsize(const char* fn) {
-	FILE* f = fopen(fn, "rb");
-	fseek(f, 0, SEEK_END);
-	int size = ftell(f) - 1;
-	fclose(f);
-	return size;
-}
-
-char* fget(const char* fn) {
-	FILE* f = fopen(fn, "rb");
-	if (f == NULL) {
-		return NULL;
-	}
-	int size = fsize(fn);
-	char* block = malloc(size + 1);
-	size_t r = fread(block, 1, size, f);
-	if (r < size) {
-		if (ferror(f)) {
-			free(block);
-			return NULL;
-		}
-	}
-	fclose(f);
-	block[size] = 0;
-	return block;
-}
-
 static const char* getmanpath() {
 	return manpath;
 }
@@ -379,4 +352,42 @@ char* get_args(compiler_args_t* argout, const int argc,const char** args) {
 	argout->inc_path = get_chara_arg(argc, args, "-inc=");
 
 	return NULL;
+}
+
+
+
+
+int fsize(const char* fn) {
+	FILE* f = fopen(fn, "rb");
+	fseek(f, 0, SEEK_END);
+	int size = ftell(f) - 1;
+	fclose(f);
+	return size;
+}
+
+char* fget(const char* fn) {
+	FILE* f = fopen(fn, "rb");
+	if (f == NULL) {
+		return NULL;
+	}
+	int size = fsize(fn);
+	char* block = malloc(size + 1);
+	size_t r = fread(block, 1, size, f);
+	if (r < size) {
+		if (ferror(f)) {
+			free(block);
+			return NULL;
+		}
+	}
+	fclose(f);
+	block[size] = 0;
+	return block;
+}
+
+bool contains(char* str, const char c) {
+	for (size_t p = 0; str[p] != 0; p++) {
+		if (str[p] == c)
+			return true;
+	}
+	return false;
 }

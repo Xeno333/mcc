@@ -82,6 +82,18 @@
 	} compiler_args_t;
 
 
+
+//Modual helper types
+	//
+	typedef struct {
+		char* str;
+		void* next;
+	} str_linked_list_t;
+
+
+
+
+
 //Lib defined
 	//print error
 	void error(const char* errors, bool self);
@@ -106,6 +118,7 @@
 	int fsize(const char* fn);
 	char* fget(const char* fn);
 	int man(const char* manfn);
+	bool contains(char* str, const char c);
 
 
 //lib vars
