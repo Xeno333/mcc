@@ -1,4 +1,4 @@
-# mcc
+# mcc (This is a Work In Progress, NOT STABLE)
 MIT licensed Compiler Collection
 
 ## Build on Linux
